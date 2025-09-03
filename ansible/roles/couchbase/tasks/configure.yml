@@ -1,0 +1,45 @@
+- name: Initialize Couchbase Cluster (first node)
+  shell: >
+    /opt/couchbase/bin/couchbase-cli cluster-init
+    --cluster {{ hostvars[inventory_hostname].private_ip }}
+    --cluster-username {{ couchbase_admin_user }}
+    --cluster-password {{ couchbase_admin_password }}
+    --services data,index,query
+  when: inventory_hostname == groups['couchbase_nodes'][0]
+  register: cluster_init
+  ignore_errors: true # Allows playbook to continue if cluster already initialized
+
+- name: Add other nodes to cluster
+  shell: >
+    /opt/couchbase/bin/couchbase-cli server-add
+    --cluster {{ hostvars[groups['couchbase_nodes'][0]].private_ip }}
+    --username {{ couchbase_admin_user }}
+    --password {{ couchbase_admin_password }}
+    --server-add {{ hostvars[inventory_hostname].private_ip }}
+    --server-add-username {{ couchbase_admin_user }}
+    --server-add-password {{ couchbase_admin_password }}
+    --services data,index,query
+  when: inventory_hostname != groups['couchbase_nodes'][0]
+  register: server_add
+  ignore_errors: true # Continue if node already added
+
+- name: Rebalance cluster (run once after all nodes added)
+  shell: >
+    /opt/couchbase/bin/couchbase-cli rebalance
+    --cluster {{ hostvars[groups['couchbase_nodes'][0]].private_ip }}
+    --username {{ couchbase_admin_user }}
+    --password {{ couchbase_admin_password }}
+  run_once: true
+  register: rebalance
+  ignore_errors: true
+
+- name: Wait for cluster to finish rebalance
+  shell: >
+    /opt/couchbase/bin/couchbase-cli server-list
+    --cluster {{ hostvars[groups['couchbase_nodes'][0]].private_ip }}
+    --username {{ couchbase_admin_user }}
+    --password {{ couchbase_admin_password }}
+  register: cluster_status
+  retries: 10
+  delay: 15
+  until: cluster_status.stdout.find('pending') == -1

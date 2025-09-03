@@ -1,0 +1,8 @@
+---
+# Entry point for the couchbase role
+
+# First, install Couchbase on the node
+- import_tasks: install.yml
+
+# Then, configure the Couchbase cluster
+- import_tasks: configure.yml

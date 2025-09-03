@@ -1,0 +1,26 @@
+- name: Install dependencies
+  apt:
+    name:
+      - wget
+    state: present
+
+- name: Download Couchbase Server directly
+  get_url:
+    url: https://packages.couchbase.com/releases/7.2.0/couchbase-server-community_7.2.0-ubuntu20.04_amd64.deb
+    dest: /tmp/couchbase-server.deb
+    timeout: 120
+
+- name: Install Couchbase Server from downloaded package
+  apt:
+    deb: /tmp/couchbase-server.deb
+
+- name: Enable and start Couchbase service
+  systemd:
+    name: couchbase-server
+    enabled: yes
+    state: started
+
+- name: Clean up package file
+  file:
+    path: /tmp/couchbase-server.deb
+    state: absent

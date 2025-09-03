@@ -1,0 +1,54 @@
+# -------------------------
+# Terraform
+# -------------------------
+# Local Terraform directories
+.terraform/
+# Terraform state files
+*.tfstate
+*.tfstate.*
+# Crash logs
+crash.log
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Ignore CLI configuration
+.terraformrc
+terraform.rc
+
+# -------------------------
+# Ansible
+# -------------------------
+# Inventory and variable secrets
+inventory/
+*.vault
+# Ansible cache and fact files
+.fact_cache/
+*.retry
+# Logs
+ansible.log
+
+# -------------------------
+# AWS
+# -------------------------
+# AWS credentials
+.aws/credentials
+.aws/config
+# AWS CLI cache
+.aws/cli/cache
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# -------------------------
+# General
+# -------------------------
+# OS generated files
+.DS_Store
+Thumbs.db
+# IDE files
+.vscode/
+.idea/
+*.swp

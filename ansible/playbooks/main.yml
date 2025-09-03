@@ -1,0 +1,6 @@
+---
+- name: Deploy Couchbase Cluster
+  hosts: couchbase_nodes
+  become: true
+  roles:
+    - couchbase
