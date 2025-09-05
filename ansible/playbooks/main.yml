@@ -2,5 +2,9 @@
 - name: Deploy Couchbase Cluster
   hosts: couchbase_nodes
   become: true
+  gather_facts: yes
+  vars_files:
+    - ../inventory/group_vars/all/var.yml
+    - ../inventory/group_vars/all/secrets.yml
   roles:
     - couchbase

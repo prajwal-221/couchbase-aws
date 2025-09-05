@@ -104,3 +104,14 @@ To destroy all created resources:
 cd terraform/environments/dev
 terraform destroy
 ```
+
+
+
+# Access node 1
+ssh -i /home/ht-admin/projects/avis/couchbase/prajwal-couchbase/prajwal/keys-testing/jenkins-testing.pem \
+    -L 8091:10.0.1.55:8091 \
+    -o ProxyCommand="ssh -i /home/ht-admin/projects/avis/couchbase/prajwal-couchbase/prajwal/keys-testing/jenkins-testing.pem -W %h:%p ubuntu@54.215.239.84" \
+    ubuntu@10.0.1.55
+
+
+# Then access http://localhost:8091

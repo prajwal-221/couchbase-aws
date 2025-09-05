@@ -1,3 +1,3 @@
-output "sg_id" { 
-  value = aws_security_group.couchbase.id 
+output "sg_id" {
+  value = aws_security_group.couchbase.id
 }
